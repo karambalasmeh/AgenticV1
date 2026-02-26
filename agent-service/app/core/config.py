@@ -24,5 +24,6 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    REQUIRE_CITATIONS: bool = False  # keep False until knowledge-service is integrated
 
 settings = Settings()

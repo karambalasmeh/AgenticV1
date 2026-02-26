@@ -1,4 +1,4 @@
-from typing import Literal, Optional, List, Dict
+from typing import Literal, Optional, List
 from pydantic import BaseModel, Field
 
 
@@ -34,9 +34,9 @@ class TimeRange(BaseModel):
 
 class SourceFilters(BaseModel):
     # English comments only
-    allowed_sources: List[str] = []
-    blocked_sources: List[str] = []
-    source_types: List[str] = []
+    allowed_sources: List[str] = Field(default_factory=list)
+    blocked_sources: List[str] = Field(default_factory=list)
+    source_types: List[str] = Field(default_factory=list)
 
 
 class Constraints(BaseModel):

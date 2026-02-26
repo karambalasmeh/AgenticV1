@@ -1,5 +1,5 @@
 from typing import List, Optional, Literal, Dict, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 Status = Literal["success", "needs_escalation", "failed"]
@@ -18,8 +18,8 @@ class Answer(BaseModel):
     format: Literal["structured", "narrative"] = "structured"
     language: Literal["ar", "en"] = "en"
     summary: str = ""
-    sections: List[AnswerSection] = []
-    actionable_points: List[str] = []
+    sections: List[AnswerSection] = Field(default_factory=list)
+    actionable_points: List[str] = Field(default_factory=list)
 
 
 class Citation(BaseModel):
@@ -36,8 +36,8 @@ class Confidence(BaseModel):
     # English comments only
     score: float
     level: ConfidenceLevel
-    rationale: List[str] = []
-    signals: Dict[str, Any] = {}
+    rationale: List[str] = Field(default_factory=list)
+    signals: Dict[str, Any] = Field(default_factory=dict)
 
 
 class ValidationIssue(BaseModel):
@@ -50,7 +50,7 @@ class ValidationIssue(BaseModel):
 class Validation(BaseModel):
     # English comments only
     passed: bool
-    issues: List[ValidationIssue] = []
+    issues: List[ValidationIssue] = Field(default_factory=list)
 
 
 class DecisionTraceStep(BaseModel):
