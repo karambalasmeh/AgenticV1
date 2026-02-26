@@ -6,6 +6,14 @@ from app.schemas.artifacts import Answer, Confidence, Validation, Escalation, Ci
 from app.orchestration.decision_trace import trace
 from app.orchestration.clarification import build_clarification_response
 from app.llm.gateway import get_llm_gateway
+from app.agents.assurance.validator import Validator
+from app.orchestration.policies.confidence_rubric import ConfidenceRubric
+from app.orchestration.escalation import EscalationEngine
+
+
+validator_agent = Validator()
+confidence_rubric = ConfidenceRubric()
+escalation_engine = EscalationEngine()
 
 
 def run_query(req: QueryRequest) -> QueryResponse:
@@ -30,21 +38,27 @@ def run_query(req: QueryRequest) -> QueryResponse:
         system="You are a government-grade assistant. Use structured response.",
     )
 
-    # 3) Validate + citations present? (placeholder)
-    dt.append(trace("validate", "SelfVerifier", "Running validation checks (placeholder)."))
-    validation = Validation(passed=True, issues=[])
+    # Note: citations are empty until knowledge-service integration
+    citations: list[Citation] = []
 
-    # 4) Confidence scoring (placeholder)
-    dt.append(trace("score_confidence", "ConfidenceScorer", "Scoring confidence (placeholder)."))
-    confidence = Confidence(
-        score=0.7,
-        level="medium",
-        rationale=["Placeholder scoring until rubric is implemented."],
-        signals={"validation_passed": True},
+    # 3) Validation orchestration
+    dt.append(trace("validate", "ValidationSuite", "Running deterministic assurance checks."))
+    validation = validator_agent.run(draft, citations)
+
+    # 4) Confidence scoring
+    dt.append(trace("score_confidence", "ConfidenceRubric", "Scoring confidence deterministically."))
+    confidence = confidence_rubric.score(
+        answer_draft=draft,
+        citations=citations,
+        validation_issues=validation.issues,
+        signals={"repair_attempts": 0},
     )
 
-    # 5) Escalation decision (placeholder)
-    escalation = Escalation(triggered=False, reason=None, ticket=None)
+    # 5) Escalation decision
+    escalation = escalation_engine.evaluate(validation=validation, confidence=confidence, signals={"repair_failures": 0})
+    if escalation.triggered:
+        dt.append(trace("escalate", "EscalationEngine", f"Escalation triggered ({escalation.reason})."))
+
     dt.append(trace("finalize", "Pipeline", "Finalizing response."))
 
     answer = Answer(
@@ -54,9 +68,6 @@ def run_query(req: QueryRequest) -> QueryResponse:
         sections=[{"title": "Answer", "content": draft}],
         actionable_points=[],
     )
-
-    # Note: citations are empty until knowledge-service integration
-    citations: list[Citation] = []
 
     return QueryResponse(
         request_id=request_id,
