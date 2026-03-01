@@ -1,9 +1,3 @@
-# app/llm/base.py
-from abc import ABC, abstractmethod
+from app.infrastructure.llm import LLMProvider
 
-
-class LLMProvider(ABC):
-    # English comments only
-    @abstractmethod
-    def generate(self, prompt: str, system: str = "") -> str:
-        raise NotImplementedError
+__all__ = ["LLMProvider"]

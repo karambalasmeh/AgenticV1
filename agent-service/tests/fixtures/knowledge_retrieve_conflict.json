@@ -1,0 +1,16 @@
+{
+  "chunks": [
+    {
+      "source_id": "policy-001",
+      "chunk_id": "c1",
+      "text": "The action is allowed.",
+      "relevance_score": 0.81
+    },
+    {
+      "source_id": "policy-002",
+      "chunk_id": "c2",
+      "text": "The same action is forbidden.",
+      "relevance_score": 0.84
+    }
+  ]
+}

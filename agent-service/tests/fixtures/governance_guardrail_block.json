@@ -1,0 +1,8 @@
+{
+  "allowed": false,
+  "blocked": true,
+  "violations": [
+    "blocked_term:weapon"
+  ],
+  "risk_score": 0.95
+}
