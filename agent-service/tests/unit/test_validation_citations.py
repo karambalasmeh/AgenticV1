@@ -1,87 +1,48 @@
-from app.agents.assurance.validator import Validator
-from app.schemas.artifacts import Citation, ValidationIssue
+from app.application.validation import ResponseValidator
+from app.domain.contracts import KnowledgeChunk
+from app.domain.models import Citation
 
 
-def test_validator_flags_missing_structure_and_citations() -> None:
-    validator = Validator()
-    draft = "Economic outlook remains uncertain. Data indicates a decline."
+def test_validator_requires_citations_when_evidence_requested() -> None:
+    validator = ResponseValidator()
+    issues = validator.validate(
+        answer="This policy increases growth by 10%.",
+        expected_language="en",
+        citations=[],
+        include_evidence=True,
+        evidence_chunks=[],
+    )
+    assert any(issue.type == "missing_citations" for issue in issues)
 
-    result = validator.run(draft, [])
 
-    issue_types = {issue.type for issue in result.issues}
-    assert not result.passed
-    assert "missing_citations" in issue_types
-    assert "incomplete_structure" in issue_types
+def test_validator_detects_language_mismatch() -> None:
+    validator = ResponseValidator()
+    issues = validator.validate(
+        answer="This answer is in English.",
+        expected_language="ar",
+        citations=[],
+        include_evidence=False,
+        evidence_chunks=[],
+    )
+    assert any(issue.type == "language_mismatch" for issue in issues)
 
 
-def test_validator_accepts_structured_answer_with_citations() -> None:
-    validator = Validator()
-    draft = """Summary: Growth is steady.
-Analysis: Production increased 5% in Q1 with matching exports.
-Recommendation: Maintain subsidy caps and re-run audit in 60 days.
-"""
-    citations = [
-        Citation(source_id="src-1", chunk_id="chunk-1", relevance_score=0.8),
-        Citation(source_id="src-2", chunk_id="chunk-5", relevance_score=0.7),
+def test_validator_detects_answer_evidence_conflict() -> None:
+    validator = ResponseValidator()
+    citations = [Citation(source_id="s1", chunk_id="c1", relevance_score=0.9)]
+    evidence = [
+        KnowledgeChunk(
+            source_id="s1",
+            chunk_id="c1",
+            text="The policy is forbidden under current regulation.",
+            relevance_score=0.9,
+        )
     ]
-
-    result = validator.run(draft, citations)
-
-    assert result.passed
-    assert result.issues == []
-
-
-def test_validator_detects_unsupported_numeric_claims() -> None:
-    validator = Validator()
-    draft = "Summary: Inflation reached 12% and unemployment hit 18% with no sources."
-
-    result = validator.run(draft, [])
-
-    issue_types = {issue.type for issue in result.issues}
-    assert "unsupported_claims" in issue_types
-
-
-def test_validator_detects_conflicting_language_and_sources() -> None:
-    validator = Validator()
-    draft = "Summary: Production will increase by 4% yet decrease by 2% due to shortages."
-    citations = [
-        Citation(source_id="src-1", chunk_id="a", title="Report supports expansion", publisher="ThinkLab", relevance_score=0.9),
-        Citation(source_id="src-1", chunk_id="b", title="Audit refutes expansion", publisher="AuditLab", relevance_score=0.4),
-    ]
-
-    result = validator.run(draft, citations)
-
-    issue_types = {issue.type for issue in result.issues}
-    assert "conflicting_evidence" in issue_types
-    assert "conflicting_sources" in issue_types
-
-
-def test_validator_recommendations_are_unique_and_mapped() -> None:
-    validator = Validator()
-    issues = [
-        ValidationIssue(type="missing_citations", severity="high", details=""),
-        ValidationIssue(type="missing_citations", severity="high", details="duplicate instance"),
-        ValidationIssue(type="conflicting_evidence", severity="medium", details=""),
-    ]
-
-    actions = validator.recommend_actions(issues)
-
-    assert actions == [
-        "Attach at least one trusted source that backs key claims.",
-        "Resolve contradictory statements or clarify timeframe.",
-    ]
-
-
-def test_validator_flags_invalid_and_duplicate_citations() -> None:
-    validator = Validator()
-    draft = "Summary: GDP grew 3% quarter over quarter."
-    citations = [
-        Citation(source_id="src-1", chunk_id="", relevance_score=0.01),
-        Citation(source_id="src-1", chunk_id="", relevance_score=0.01),
-    ]
-
-    result = validator.run(draft, citations)
-
-    issue_types = {issue.type for issue in result.issues}
-    assert "invalid_citations" in issue_types
-    assert "duplicate_citations" in issue_types
+    issues = validator.validate(
+        answer="The policy is fully allowed and encouraged.",
+        expected_language="en",
+        citations=citations,
+        include_evidence=True,
+        evidence_chunks=evidence,
+    )
+    assert any(issue.type == "answer_evidence_conflict" for issue in issues)

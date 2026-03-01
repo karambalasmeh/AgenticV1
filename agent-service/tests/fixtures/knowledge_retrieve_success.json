@@ -1,0 +1,16 @@
+{
+  "chunks": [
+    {
+      "source_id": "policy-001",
+      "chunk_id": "chunk-a",
+      "text": "Policy excerpt about transport modernization.",
+      "relevance_score": 0.92,
+      "metadata": {
+        "title": "Transport Strategy"
+      }
+    }
+  ],
+  "metadata": {
+    "source_filters_supported": false
+  }
+}

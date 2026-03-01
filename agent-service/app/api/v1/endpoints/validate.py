@@ -1,21 +1,26 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from app.schemas.validate_models import ValidateRequest, ValidateResponse
-from app.agents.assurance.validator import Validator
+from app.api.dependencies import get_container
+from app.application.language import detect_language
+from app.domain.models import ValidateRequest, ValidateResponse
+from app.infrastructure.bootstrap import ServiceContainer
 
 router = APIRouter()
-validator_agent = Validator()
 
 
 @router.post("/validate", response_model=ValidateResponse)
-def validate(req: ValidateRequest) -> ValidateResponse:
-    result = validator_agent.run(req.answer_draft, req.citations)
-    recommended_actions = validator_agent.recommend_actions(result.issues)
-    escalation_recommended = any(issue.severity == "high" for issue in result.issues)
-
+async def validate(req: ValidateRequest, container: ServiceContainer = Depends(get_container)) -> ValidateResponse:
+    language = req.language if req.language in {"ar", "en"} else detect_language(req.answer_draft)
+    issues = container.validator.validate(
+        answer=req.answer_draft,
+        expected_language=language,
+        citations=req.citations,
+        include_evidence=req.require_evidence,
+        evidence_chunks=[],
+    )
     return ValidateResponse(
-        valid=result.passed,
-        issues=result.issues,
-        recommended_actions=recommended_actions,
-        escalation_recommended=escalation_recommended,
+        valid=not issues,
+        issues=issues,
+        recommended_actions=container.validator.recommend_actions(issues),
+        escalation_recommended=any(issue.severity in {"high", "medium"} for issue in issues),
     )

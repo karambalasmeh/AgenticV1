@@ -1,14 +1,15 @@
-from fastapi import APIRouter
-from app.schemas.explain_models import ExplainDecisionRequest, ExplainDecisionResponse
+from fastapi import APIRouter, Depends
+
+from app.api.dependencies import get_container
+from app.domain.models import ExplainDecisionRequest, ExplainDecisionResponse
+from app.infrastructure.bootstrap import ServiceContainer
 
 router = APIRouter()
 
 
 @router.post("/explain_decision", response_model=ExplainDecisionResponse)
-def explain_decision(req: ExplainDecisionRequest) -> ExplainDecisionResponse:
-    # Placeholder: will be derived from decision_trace later
-    return ExplainDecisionResponse(
-        summary="Decision explanation placeholder.",
-        explanation=[],
-        audit_tags=[],
-    )
+async def explain_decision(
+    req: ExplainDecisionRequest,
+    container: ServiceContainer = Depends(get_container),
+) -> ExplainDecisionResponse:
+    return container.explainer.explain(req)

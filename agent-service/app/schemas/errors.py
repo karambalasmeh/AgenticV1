@@ -1,11 +1,3 @@
-from typing import Any, Optional
-from pydantic import BaseModel
+from app.domain.models import APIErrorResponse
 
-
-class APIErrorResponse(BaseModel):
-    # English comments only
-    error_code: str
-    message: str
-    details: Optional[Any] = None
-    request_id: str
-    timestamp: str
+__all__ = ["APIErrorResponse"]

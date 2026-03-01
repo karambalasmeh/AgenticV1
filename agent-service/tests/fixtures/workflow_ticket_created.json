@@ -1,0 +1,7 @@
+{
+  "ticket_id": "MOCK-TICKET-001",
+  "status": "open",
+  "metadata": {
+    "mock": true
+  }
+}

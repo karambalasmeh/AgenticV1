@@ -1,111 +1,107 @@
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/.dockerignore
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/.env.example
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/.gitignore
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/README.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/assurance/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/assurance/basic_validator.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/assurance/citation_enforcer.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/assurance/conflict_detector.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/assurance/self_verifier.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/assurance/validator.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/base.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/delegation_engine.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/registry.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/router_agent.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/specialists/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/specialists/compare_agent.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/specialists/merge_agent.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/specialists/policy_explain_agent.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/specialists/risk_impact_agent.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/agents/specialists/sector_explain_agent.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/endpoints/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/endpoints/confidence.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/endpoints/delegate.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/endpoints/explain_decision.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/endpoints/health.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/endpoints/query.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/endpoints/validate.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/api/v1/router.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/core/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/core/config.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/core/constants.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/core/errors.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/core/logging.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/core/tracing.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/llm/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/llm/base.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/llm/gateway.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/llm/providers/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/llm/providers/mock_provider.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/llm/providers/vertex_gemini.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/main.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/clarification.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/decision_trace.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/escalation.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/pipeline.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/policies/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/policies/basic_confidence.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/policies/citation_policy.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/policies/complexity_rules.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/policies/confidence_rubric.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/policies/validation_policy.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/orchestration/repair_loop.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/artifacts.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/common.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/confidence_models.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/delegate_models.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/errors.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/explain_models.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/query_models.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/schemas/validate_models.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/base_client.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/contracts/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/contracts/governance_contracts.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/contracts/knowledge_contracts.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/contracts/workflow_contracts.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/governance_client.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/knowledge_client.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/mocks/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/mocks/governance_mock.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/mocks/knowledge_mock.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/mocks/workflow_mock.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/tools/workflow_client.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/utils/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/utils/ids.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/utils/text.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/app/utils/time.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/docs/LLM_Context.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/docs/api_contracts.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/docs/clarification_policy.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/docs/confidence_rubric.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/docs/decision_trace_spec.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/docs/escalation_payload.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/docs/flow_diagram_mapping.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/docs/validation_policy.md
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/pyproject.toml
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/requirements.txt
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/fixtures/governance_guardrail_block.json
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/fixtures/governance_guardrail_pass.json
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/fixtures/knowledge_retrieve_conflict.json
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/fixtures/knowledge_retrieve_missing_docs.json
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/fixtures/knowledge_retrieve_success.json
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/fixtures/llm_mock_outputs.json
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/fixtures/workflow_ticket_created.json
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/integration/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/integration/test_escalation_payload.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/integration/test_query_e2e_with_mocks.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/unit/__init__.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/unit/test_clarification_flow.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/unit/test_confidence_rubric.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/unit/test_delegation_engine.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/unit/test_repair_loop.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/unit/test_router_complexity.py
-https://github.com/karambalasmeh/AgenticV1/blob/main/agent-service/tests/unit/test_validation_citations.py
+# agent-service (Team 2)
+
+Government-grade orchestration microservice for the Jordan National Policy Intelligence Platform.
+
+## What this service does
+
+- Exposes `POST /api/v1/query` for chat-first policy answers.
+- Orchestrates deterministic-first routing, specialist generation, validation/repair, confidence scoring, and escalation.
+- Integrates with knowledge/governance/workflow services through resilient clients with automatic mock fallback.
+- Persists audit logs, conversation history, artifacts, violations, tickets, and memory jobs asynchronously (non-blocking for `/query`).
+
+## Clean architecture
+
+- `app/api`: FastAPI routers only.
+- `app/application`: orchestration, routing, validation, confidence, escalation, explanation.
+- `app/domain`: request/response schemas and integration contracts.
+- `app/infrastructure`: LLM providers, HTTP clients + mocks, persistence (SQLAlchemy), bootstrap/container.
+
+## API surface
+
+- `POST /api/v1/query`
+- `POST /api/v1/delegate`
+- `POST /api/v1/confidence`
+- `POST /api/v1/validate`
+- `POST /api/v1/explain_decision`
+- `GET /health` (and `GET /api/v1/health`)
+
+## Query behavior and `output_controls`
+
+Default (chat-first): if `output_controls` is omitted, response is:
+
+```json
+{ "request_id": "...", "answer": "..." }
+```
+
+Backward-compatible controls:
+
+- `include_evidence=false` => `citations` is always `[]`.
+- `include_decision_trace=false` => `decision_trace` and `trace` are always `[]`.
+- `include_confidence=false` => `confidence` is omitted.
+- All internal artifacts are still computed and persisted.
+
+## Local run (mock mode)
+
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --host 127.0.0.1 --port 8002 --reload
+```
+
+Swagger: `http://127.0.0.1:8002/docs`
+
+## Local run (real integrations)
+
+Set:
+
+- `USE_MOCK_SERVICES=false`
+- `LLM_PROVIDER=vertex` (or keep `mock`)
+- service URLs to live endpoints
+- `DATABASE_URL` to Postgres (for example `127.0.0.1:5433`)
+
+## Env vars (`.env.example`)
+
+| Variable | Purpose | Default |
+|---|---|---|
+| `USE_MOCK_SERVICES` | Enable mock fallback clients | `true` |
+| `LLM_PROVIDER` | `mock` or `vertex` provider | `mock` |
+| `DATABASE_URL` | SQLite/Postgres connection | `sqlite:///./agent_service.db` |
+| `KNOWLEDGE_SERVICE_URL` | Team-1 endpoint | `http://knowledge-service:8000` |
+| `WORKFLOW_SERVICE_URL` | Team-4 endpoint | `http://workflow-service:8000` |
+| `GOVERNANCE_SERVICE_URL` | Team-3 endpoint | `http://governance-service:8000` |
+| `CLIENT_TIMEOUT_S` | downstream timeout | `4` |
+| `CLIENT_RETRIES` | downstream retries | `1` |
+
+Postgres port-conflict example: `postgresql+psycopg://user:pass@127.0.0.1:5433/agent_service`
+
+## Testing and checks
+
+```bash
+pytest -q
+python -m compileall app
+```
+
+## Lint / format (CI-like command set)
+
+```bash
+ruff check .
+ruff format .
+pytest -q
+```
+
+## Escalation ticket payload
+
+When escalated, workflow payload includes:
+
+- ministry classification (`ministry_id`, `ministry_name`, confidence, rationale)
+- confidence reasons
+- validation issues
+- evidence pack
+- decision trace
+- request/user context
+
+## Notes
+
+- Knowledge retrieval currently uses chunks without source filtering (as required).
+- Conflict detection is deterministic and cheap.
+- Memory/history writes are background tasks and never block `/query`.
+- See `docs/ASSUMPTIONS.md` for explicit assumptions and future TODO hooks.
