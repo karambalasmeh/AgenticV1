@@ -12,7 +12,6 @@ from app.schemas.artifacts import Answer, Confidence, Validation, Escalation, Ci
 
 from app.orchestration.decision_trace import trace
 from app.orchestration.clarification import build_clarification_response
-<<<<<<< HEAD
 from app.orchestration.repair_loop import run_with_repair
 from app.orchestration.policies.basic_confidence import score_confidence
 
@@ -22,14 +21,10 @@ from app.agents.router_agent import RouterAgent
 from app.agents.delegation_engine import DelegationEngine
 
 from app.agents.assurance.basic_validator import basic_validate
-=======
-from app.llm.gateway import get_llm_gateway
->>>>>>> main
 from app.agents.assurance.validator import Validator
 from app.orchestration.policies.confidence_rubric import ConfidenceRubric
 from app.orchestration.escalation import EscalationEngine
 
-<<<<<<< HEAD
 from app.agents.specialists.policy_explain_agent import PolicyExplainAgent
 from app.agents.specialists.compare_agent import CompareAgent
 from app.agents.specialists.merge_agent import MergeAgent
@@ -39,9 +34,7 @@ from app.agents.specialists.risk_impact_agent import RiskImpactAgent
 from app.utils.text import detect_language_from_text
 
 # Global orchestration components
-=======
 
->>>>>>> main
 validator_agent = Validator()
 confidence_rubric = ConfidenceRubric()
 escalation_engine = EscalationEngine()
@@ -99,7 +92,7 @@ def run_query(req: QueryRequest) -> QueryResponse:
         max_attempts=2,
     )
 
-<<<<<<< HEAD
+
     answer_draft = str(artifacts.get("answer_draft", "")).strip()
 
     # 3) Validation orchestration
@@ -136,7 +129,7 @@ def run_query(req: QueryRequest) -> QueryResponse:
     
     # Evidence output control (citations filtered for final response)
     citations: list[Citation] = raw_citations if req.output_controls.include_evidence else []
-=======
+
     # Note: citations are empty until knowledge-service integration
     citations: list[Citation] = []
 
@@ -159,7 +152,7 @@ def run_query(req: QueryRequest) -> QueryResponse:
         dt.append(trace("escalate", "EscalationEngine", f"Escalation triggered ({escalation.reason})."))
 
     dt.append(trace("finalize", "Pipeline", "Finalizing response."))
->>>>>>> main
+
 
     answer = Answer(
         format="structured",
@@ -189,13 +182,10 @@ def _detect_missing_required_params(req: QueryRequest) -> list[str]:
     if req.tasking.response_type in ("monitoring_summary", "comparison"):
         if not req.constraints.time_range or not (req.constraints.time_range.from_date and req.constraints.time_range.to_date):
             missing.append("time_range.from & time_range.to")
-
-<<<<<<< HEAD
-=======
     # Example: require policy identifiers for comparison (placeholder)
     if req.tasking.response_type == "comparison":
         # No strict requirement now; keep it loose to avoid conflicts
         pass
 
->>>>>>> main
+
     return missing
