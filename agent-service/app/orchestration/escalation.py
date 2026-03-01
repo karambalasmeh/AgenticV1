@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+from __future__ import annotations
+
+from typing import Any, Dict, Optional
+from app.schemas.artifacts import Escalation, Validation, Confidence
+
+class EscalationEngine:
+=======
 """Escalation rules triggered by validation and confidence outcomes."""
 from __future__ import annotations
 
@@ -22,10 +30,34 @@ class EscalationEngine:
     def __init__(self, policy: EscalationPolicy | None = None) -> None:
         self.policy = policy or EscalationPolicy()
 
+>>>>>>> main
     def evaluate(
         self,
         validation: Validation,
         confidence: Confidence,
+<<<<<<< HEAD
+        signals: Dict[str, Any] = None
+    ) -> Escalation:
+        # Ported logic from karam:
+        # if (not valid_after_repair) or (confidence.level == "low"):
+        #     triggered = True
+        
+        triggered = False
+        reason = None
+        
+        if not validation.passed:
+            triggered = True
+            reason = "invalid_output"
+        elif confidence.level == "low":
+            triggered = True
+            reason = "low_confidence"
+            
+        return Escalation(
+            triggered=triggered,
+            reason=reason,
+            ticket=None
+        )
+=======
         signals: Dict[str, int | bool] | None = None,
     ) -> Escalation:
         signals = signals or {}
@@ -54,3 +86,4 @@ class EscalationEngine:
 
     def _has_conflicts(self, issues: Sequence[ValidationIssue]) -> bool:
         return any(issue.type in self.policy.conflict_issue_types for issue in issues)
+>>>>>>> main
