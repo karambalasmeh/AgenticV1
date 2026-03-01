@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+from typing import List
 
 from app.core.config import settings
 from app.core.tracing import get_request_id
@@ -20,6 +21,9 @@ from app.agents.router_agent import RouterAgent
 from app.agents.delegation_engine import DelegationEngine
 
 from app.agents.assurance.basic_validator import basic_validate
+from app.agents.assurance.validator import Validator
+from app.orchestration.policies.confidence_rubric import ConfidenceRubric
+from app.orchestration.escalation import EscalationEngine
 
 from app.agents.specialists.policy_explain_agent import PolicyExplainAgent
 from app.agents.specialists.compare_agent import CompareAgent
@@ -28,6 +32,11 @@ from app.agents.specialists.sector_explain_agent import SectorExplainAgent
 from app.agents.specialists.risk_impact_agent import RiskImpactAgent
 
 from app.utils.text import detect_language_from_text
+
+# Global orchestration components
+validator_agent = Validator()
+confidence_rubric = ConfidenceRubric()
+escalation_engine = EscalationEngine()
 
 
 def run_query(req: QueryRequest) -> QueryResponse:
@@ -84,29 +93,28 @@ def run_query(req: QueryRequest) -> QueryResponse:
 
     answer_draft = str(artifacts.get("answer_draft", "")).strip()
 
-    # Evidence output control
-    raw_citations: list[Citation] = artifacts.get("citations", []) or []
-    citations: list[Citation] = raw_citations if req.output_controls.include_evidence else []
+    # 3) Validation orchestration
+    ctx.trace.append(trace("validate", "ValidationSuite", "Running deterministic assurance checks."))
+    validation = validator_agent.run(answer_draft, raw_citations)
 
-    # Validation output control
-    validation_issues = issues if req.output_controls.include_validation_report else []
-    validation = Validation(passed=valid_after_repair, issues=validation_issues)
-
-    # Confidence scoring
-    ctx.trace.append(trace("score_confidence", "ConfidenceScorer", f"attempts={attempts}"))
-    score, level, rationale, signals = score_confidence(
-        valid=valid_after_repair,
-        issues=issues,
-        is_complex=decision.is_complex,
-        citations_count=len(citations),
+    # 4) Confidence scoring
+    ctx.trace.append(trace("score_confidence", "ConfidenceRubric", f"Scoring confidence (attempts={attempts})."))
+    confidence = confidence_rubric.score(
+        answer_draft=answer_draft,
+        citations=raw_citations,
+        validation_issues=validation.issues,
+        signals={"repair_attempts": attempts, "is_complex": decision.is_complex},
     )
-    confidence = Confidence(score=score, level=level, rationale=rationale, signals=signals)
 
-    # Escalation decision
-    escalation = Escalation(triggered=False, reason=None, ticket=None)
-    if (not valid_after_repair) or (confidence.level == "low"):
-        ctx.trace.append(trace("escalate", "EscalationTrigger", "Escalation due to low confidence or invalid output."))
-        escalation = Escalation(triggered=True, reason="low_confidence_or_invalid", ticket=None)
+    # 5) Escalation decision
+    escalation = escalation_engine.evaluate(
+        validation=validation,
+        confidence=confidence,
+        signals={"repair_failures": 0 if valid_after_repair else 1}
+    )
+    
+    if escalation.triggered:
+        ctx.trace.append(trace("escalate", "EscalationEngine", f"Escalation triggered ({escalation.reason})."))
         status = "needs_escalation"
     else:
         status = "success"
@@ -116,6 +124,10 @@ def run_query(req: QueryRequest) -> QueryResponse:
 
     # Final answer packaging
     ctx.trace.append(trace("finalize", "Pipeline", "Returning final response."))
+    
+    # Evidence output control (citations filtered for final response)
+    citations: list[Citation] = raw_citations if req.output_controls.include_evidence else []
+
     answer = Answer(
         format="structured",
         language=response_lang,
@@ -134,3 +146,15 @@ def run_query(req: QueryRequest) -> QueryResponse:
         decision_trace=decision_trace,
         escalation=escalation,
     )
+
+
+def _detect_missing_required_params(req: QueryRequest) -> list[str]:
+    # English comments only
+    # Example: require timeframe for monitoring_summary or comparison
+    missing: list[str] = []
+
+    if req.tasking.response_type in ("monitoring_summary", "comparison"):
+        if not req.constraints.time_range or not (req.constraints.time_range.from_date and req.constraints.time_range.to_date):
+            missing.append("time_range.from & time_range.to")
+
+    return missing
